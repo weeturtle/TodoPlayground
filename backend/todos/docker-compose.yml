@@ -1,0 +1,10 @@
+services:
+  todo-service:
+    build: .
+    ports:
+      - "4001:4001"
+
+    # Possibly use
+    # stdin_open: true
+    # tty: true
+    # env_file: .env

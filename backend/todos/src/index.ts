@@ -8,11 +8,7 @@ const main = async () => {
   app.use(jsonParser);
   const port = 4001;
 
-  app.get("/", async (_, res) => {
-    res.status(200);
-  });
-
-  app.use("/todos", todoRouter);
+  app.use("", todoRouter);
 
   app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}`);

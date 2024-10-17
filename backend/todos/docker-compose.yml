@@ -1,5 +1,5 @@
 services:
-  todo-db:
+  todo_db:
     image: postgres:16
     restart: always
     user: postgres
@@ -10,10 +10,10 @@ services:
     volumes:
       - todo-vol:/var/lib/postgresql/data
 
-  todo-api:
+  todo_api:
     build: .
     depends_on:
-      - todo-db
+      - todo_db
     ports:
       - "4001:4001"
     env_file: .env

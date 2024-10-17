@@ -1,5 +1,5 @@
 services:
-  auth-db:
+  auth_db:
     image: postgres:16
     restart: always
     user: postgres
@@ -10,10 +10,10 @@ services:
     volumes:
       - auth-vol:/var/lib/postgresql/data
 
-  auth-api:
+  auth_api:
     build: .
     depends_on:
-      - auth-db
+      - auth_db
     ports:
       - "4002:4002"
     env_file: .env

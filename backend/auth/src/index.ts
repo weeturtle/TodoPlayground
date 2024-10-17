@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import authRouter from "./auth";
 
 const main = async () => {
   const jsonParser = bodyParser.json();
@@ -10,6 +11,8 @@ const main = async () => {
   app.get("/", async (_, res) => {
     res.status(200).send("Server running");
   });
+
+  app.use(authRouter);
 
   app.listen(port, () => {
     console.log(`Server started at http://localhost:${port}`);

@@ -28,6 +28,8 @@ interface INewTodo {
 router.post("/", async (req, res) => {
   const { userId, title }: INewTodo = req.body;
 
+  console.log(`userId: ${userId}, title: ${title}`);
+
   try {
     const todo = await prisma.todo.create({
       data: {

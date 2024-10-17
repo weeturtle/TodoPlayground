@@ -1,0 +1,80 @@
+services:
+  todo_api:
+    extends:
+      file: backend/todos/docker-compose.yml
+      service: todo_api
+    networks:
+      - todo_microservices
+    profiles:
+      - prod
+      - dev
+
+  auth_api:
+    extends:
+      file: backend/auth/docker-compose.yml
+      service: auth_api
+    networks:
+      - todo_microservices
+    profiles:
+      - prod
+      - dev
+
+  todo_db:
+    extends:
+      file: backend/todos/docker-compose.yml
+      service: todo_db
+    networks:
+      - todo_microservices
+    volumes:
+      - todo-vol:/var/lib/postgresql/data
+    profiles:
+      - prod
+      - dev
+
+  auth_db:
+    extends:
+      file: backend/auth/docker-compose.yml
+      service: auth_db
+    networks:
+      - todo_microservices
+    volumes:
+      - auth-vol:/var/lib/postgresql/data
+    profiles:
+      - prod
+      - dev
+
+  gateway:
+    image: nginx:1.27.0-alpine
+    ports:
+      - "80:80"
+    networks:
+      - todo_microservices
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - todo_api
+      - auth_api
+    profiles:
+      - prod
+      - dev
+
+  frontend-dev:
+    extends:
+      file: frontend/docker-compose.yml
+      service: frontend-dev
+    profiles:
+      - dev
+
+  frontend-prod:
+    extends:
+      file: frontend/docker-compose.yml
+      service: frontend-prod
+    profiles:
+      - prod
+
+volumes:
+  todo-vol:
+  auth-vol:
+
+networks:
+  todo_microservices:

@@ -1,10 +1,26 @@
 services:
-  todo-service:
+  todo-db:
+    image: postgres:16
+    restart: always
+    user: postgres
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - todo-vol:/var/lib/postgresql/data
+
+  todo-api:
     build: .
+    depends_on:
+      - todo-db
     ports:
       - "4001:4001"
+    env_file: .env
 
     # Possibly use
     # stdin_open: true
     # tty: true
-    # env_file: .env
+
+volumes:
+  todo-vol:

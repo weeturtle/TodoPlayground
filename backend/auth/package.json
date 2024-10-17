@@ -1,0 +1,20 @@
+{
+  "name": "todos",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "build": "yarn tsc"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "5.21.0",
+    "@types/node": "^22.7.6",
+    "express": "^4.21.1",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "prisma": "^5.21.0"
+  }
+}

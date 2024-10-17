@@ -1,6 +1,6 @@
-Basic Todo app
+Install Docker and Docker Compose (usually packaged together)
 
-For the frontend,
+Run `docker compose --profile=dev up --build`
 
-run `yarn install` to install dependencies
-run `yarn dev` to start the server
+To see the frontend go to `http://localhost:3000`
+To test the backend use `http://localhost:80`

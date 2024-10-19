@@ -101,7 +101,7 @@ router.get("/verify/:token", async (req, res) => {
       return;
     }
 
-    res.status(200).json(verification);
+    res.status(200).send("Token is valid");
   } catch (e) {
     res.status(500).send("Internal server error");
   }

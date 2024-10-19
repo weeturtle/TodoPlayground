@@ -9,16 +9,24 @@ export const tokenify = (id: string) => {
     },
     process.env.JWT || "secret",
     {
-      expiresIn: "1h",
+      expiresIn: "1s",
     },
   );
 };
 
 export const verify = (token: string) => {
-  const verification = jwt.verify(token, process.env.JWT || "secret");
-  if (verification) {
-    return verification;
-  }
+  try {
+    const verification = jwt.verify(token, process.env.JWT || "secret");
 
+    if (!verification || typeof verification === "string") {
+      return null;
+    }
+
+    return verification.id;
+  } catch (e) {
+    if (e instanceof jwt.TokenExpiredError) {
+      console.log("Token expired");
+    }
+  }
   return null;
 };

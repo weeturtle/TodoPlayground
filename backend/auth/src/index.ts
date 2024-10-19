@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import authRouter from "./auth";
+import authRouter from "./routes/external";
 
 const main = async () => {
   const jsonParser = bodyParser.json();
@@ -11,6 +11,8 @@ const main = async () => {
   app.get("/", async (_, res) => {
     res.status(200).send("Server running");
   });
+
+  app.use("/auth", authRouter);
 
   app.use(authRouter);
 

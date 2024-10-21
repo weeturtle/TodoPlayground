@@ -1,12 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
-import cors from "cors";
 import authRouter from "./routes/external";
 
 const main = async () => {
   const jsonParser = bodyParser.json();
   const app = express();
-  app.use(cors());
   app.use(jsonParser);
   const port = 4002;
 

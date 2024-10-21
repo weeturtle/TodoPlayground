@@ -1,5 +1,9 @@
 #!/bin/sh
-echo "Adding environment variables to .env file"
+echo "Cloning git repository"
+git clone https://github.com/weeturtle/TodoPlayground.git
+cd TodoPlayground
+
+echo "Adding environment variables to .env files"
 echo '
 JWT="sfji43d"
 DB_USER="postgres"

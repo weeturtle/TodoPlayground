@@ -11,7 +11,9 @@ WORKDIR /app
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
+
 RUN npx prisma generate
+RUN npx prisma db push
 RUN yarn build
 
 FROM dependencies AS deploy

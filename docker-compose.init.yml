@@ -2,6 +2,7 @@ services:
   auth_api:
     build:
       context: backend/auth
+      no_cache: true
     depends_on:
       auth_db:
         condition: service_healthy
@@ -17,6 +18,7 @@ services:
   todo_api:
     build:
       context: backend/todos
+      no_cache: true
     depends_on:
       todo_db:
         condition: service_healthy
@@ -64,42 +66,6 @@ services:
       - todo_microservices
     volumes:
       - todo-vol:/var/lib/postgresql/data
-
-  gateway:
-    image: nginx:1.27.0-alpine
-    ports:
-      - "80:80"
-    networks:
-      - todo_microservices
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    depends_on:
-      - todo_api
-      - auth_api
-
-  frontend-dev:
-    build:
-      context: ./frontend
-    volumes:
-      - "./frontend:/app/"
-      - "/app/node_modules"
-    ports:
-      - "3000:3000"
-    networks:
-      - todo_microservices
-    profiles:
-      - dev
-
-  frontend-prod:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-    ports:
-      - "3000:3000"
-    networks:
-      - todo_microservices
-    profiles:
-      - prod
 
 volumes:
   todo-vol:

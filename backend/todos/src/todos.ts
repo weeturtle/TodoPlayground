@@ -3,8 +3,13 @@ import prisma from "./prisma";
 
 const router = Router();
 
-router.get("/:userId", async (req, res) => {
-  const { userId } = req.params;
+router.get("/", async (req, res) => {
+  const userId = req.headers["userId"] as string | null;
+
+  if (!userId) {
+    res.status(400).send("User ID is required");
+    return;
+  }
 
   try {
     const todos = await prisma.todo.findMany({
@@ -21,14 +26,17 @@ router.get("/:userId", async (req, res) => {
 });
 
 interface INewTodo {
-  userId: string;
   title: string;
 }
 
 router.post("/", async (req, res) => {
-  const { userId, title }: INewTodo = req.body;
+  const userId = req.headers["userId"] as string | null;
+  const { title }: INewTodo = req.body;
 
-  console.log(`userId: ${userId}, title: ${title}`);
+  if (!userId) {
+    res.status(400).send("User ID is required");
+    return;
+  }
 
   try {
     const todo = await prisma.todo.create({

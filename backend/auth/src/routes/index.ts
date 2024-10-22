@@ -14,8 +14,6 @@ interface ILogin {
 router.post("/login", async (req, res) => {
   const { email, password }: ILogin = req.body;
 
-  console.log(`email: ${email}, password: ${password}`);
-
   if (!email || !password) {
     res.status(400).send("Email and password are required");
     return;
@@ -31,15 +29,12 @@ router.post("/login", async (req, res) => {
     },
   });
 
-  console.log(user);
-
   if (!user) {
     res.status(400).send("User not found");
     return;
   }
 
   const valid = await bcrypt.compare(password, user.password);
-  console.log(`valid: ${valid}`);
 
   if (!valid) {
     res.status(400).send("Invalid password");
@@ -47,7 +42,6 @@ router.post("/login", async (req, res) => {
   }
 
   const token = tokenify(user.id);
-  console.log(`token: ${token}`);
   res.status(200).json({ token });
 });
 
@@ -85,23 +79,18 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.get("/verify/:token", async (req, res) => {
-  const token = req.params.token;
-
-  if (!token) {
-    res.status(400).send("Token is required");
-    return;
-  }
+router.get("/verify", async (req, res) => {
+  const token = req.header("Authorization")?.replace("Bearer ", "");
 
   try {
-    const verification = verify(token);
-
-    if (!verification) {
+    if (!token) {
       res.status(400).send("Invalid token");
       return;
     }
 
-    res.status(200).send("Token is valid");
+    const id = verify(token);
+
+    res.status(200).json({ id });
   } catch (e) {
     res.status(500).send("Internal server error");
   }

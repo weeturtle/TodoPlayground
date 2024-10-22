@@ -9,12 +9,12 @@ export const tokenify = (id: string) => {
     },
     process.env.JWT || "secret",
     {
-      expiresIn: "1s",
+      expiresIn: "2h",
     },
   );
 };
 
-export const verify = (token: string) => {
+export const verify = (token: string): string | null => {
   try {
     const verification = jwt.verify(token, process.env.JWT || "secret");
 

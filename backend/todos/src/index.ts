@@ -1,11 +1,13 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors";
 import todoRouter from "./todos";
 import middleware from "./middleware";
 
 const main = async () => {
   const jsonParser = bodyParser.json();
   const app = express();
+  app.use(cors());
   app.use(jsonParser);
   const port = 4001;
 

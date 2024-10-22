@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TodoItem from '.';
+import fetchTodos from './fetchTodos';
+import { useAuth } from '../../provider/useAuth';
+import axios from 'axios';
 
 export interface ITodo {
   id: string;
@@ -8,27 +11,53 @@ export interface ITodo {
 }
 
 const TodoContainer = () => {
-  const [todos, setTodos] = useState<ITodo[]>([
-    { id: '1', title: 'Learn React', completed: false },
-    { id: '2', title: 'Learn TypeScript', completed: false },
-    { id: '3', title: 'Learn Next.js', completed: false },
-  ]);
+  const [todos, setTodos] = useState<ITodo[]>([]);
+  const { isAuthed } = useAuth();
 
-  const handleToggle = (id: string) => {
-    // Temporary replacement for useOptimism
-    const todo = todos.find((todo) => todo.id === id);
+  useEffect(() => {
+    const getTodos = async () => {
+      const _todos = await fetchTodos();
+      console.log(_todos);
+      setTodos(_todos);
+    };
 
-    if (!todo) {
+    if (isAuthed) {
+      getTodos();
+    }
+  }, [isAuthed]);
+
+  const handleToggle = async (id: string) => {
+    const initial_todo = todos.find((todo) => todo.id === id);
+
+    if (!initial_todo) {
       return;
     }
-
-    todo.completed = !todo.completed;
 
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo,
       ),
     );
+
+    try {
+      const response = await axios.put('/todos', {
+        id,
+        completed: !initial_todo.completed,
+      });
+
+      if (response.status !== 200) {
+        throw new Error('Failed to update todo');
+      }
+    } catch (error) {
+      setTodos((prevTodos) =>
+        prevTodos.map((todo) =>
+          todo.id === id
+            ? { ...todo, completed: initial_todo.completed }
+            : todo,
+        ),
+      );
+      console.error(error);
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -39,18 +68,19 @@ const TodoContainer = () => {
     <>
       <h1>Todo List</h1>
       <ul>
-        {todos
-          .sort((a, b) =>
-            a.completed === b.completed ? 0 : a.completed ? 1 : -1,
-          )
-          .map((todo) => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              handleToggle={handleToggle}
-              handleDelete={handleDelete}
-            />
-          ))}
+        {todos &&
+          todos
+            .sort((a, b) =>
+              a.completed === b.completed ? 0 : a.completed ? 1 : -1,
+            )
+            .map((todo) => (
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                handleToggle={handleToggle}
+                handleDelete={handleDelete}
+              />
+            ))}
       </ul>
     </>
   );

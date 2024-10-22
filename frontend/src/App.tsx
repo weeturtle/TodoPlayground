@@ -7,7 +7,6 @@ import PrivateRoute from './components/routes';
 import Layout from './components/routes/layout';
 import ErrorPage from './pages/ErrorPage';
 import RegisterPage from './pages/register';
-import ProfilePage from './pages/profile';
 
 const App = () => {
   return (
@@ -16,7 +15,6 @@ const App = () => {
         <Route element={<Layout />}>
           <Route element={<PrivateRoute />}>
             <Route index element={<HomePage />} />
-            <Route path="/profile" element={<ProfilePage />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />

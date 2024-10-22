@@ -16,9 +16,14 @@ router.get("/", async (req, res) => {
       where: {
         userId,
       },
+      select: {
+        id: true,
+        title: true,
+        completed: true,
+      },
     });
 
-    res.status(200).json(todos);
+    res.status(200).json({ todos });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "An error occurred" });
@@ -53,9 +58,13 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { completed }: { completed: boolean } = req.body;
+interface IUpdateTodo {
+  id: string;
+  completed: boolean;
+}
+
+router.put("/", async (req, res) => {
+  const { id, completed }: IUpdateTodo = req.body;
 
   try {
     const todo = await prisma.todo.update({

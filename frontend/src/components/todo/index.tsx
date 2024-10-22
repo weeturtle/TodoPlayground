@@ -2,7 +2,9 @@ import { ITodo } from './todoContainer';
 
 interface TodoProps {
   todo: ITodo;
+  // eslint-disable-next-line no-unused-vars
   handleToggle: (id: string) => void;
+  // eslint-disable-next-line no-unused-vars
   handleDelete: (id: string) => void;
 }
 
@@ -15,7 +17,11 @@ const TodoItem = ({ todo, handleToggle, handleDelete }: TodoProps) => {
         onChange={() => handleToggle(todo.id)}
       />
       <button onClick={() => handleDelete(todo.id)}>Delete</button>
-      {todo.title}
+      <p
+        style={{ textDecorationLine: todo.completed ? 'line-through' : 'none' }}
+      >
+        {todo.title}
+      </p>
     </li>
   );
 };

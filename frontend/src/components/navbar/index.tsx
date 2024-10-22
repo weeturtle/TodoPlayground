@@ -21,7 +21,6 @@ const Navbar = () => {
       {token && (
         <>
           <Link to="/">Home</Link>
-          <Link to="/profile">Profile</Link>
           <button onClick={onLogout}>Logout</button>
         </>
       )}
